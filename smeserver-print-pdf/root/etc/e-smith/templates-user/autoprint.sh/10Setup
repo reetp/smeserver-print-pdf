@@ -12,7 +12,7 @@
     # should be or die here if no printer defined or found
     my $printpdfprinter = $configDB->get_prop( 'printpdf', 'PrinterName' ) || '';
 
-    if (( $printpdfstatus ne 'enabled' ) || ( $pop3status ne 'enabled' ) || ( $printpdfprinter ne '' )){
+    if (( $printpdfstatus ne 'enabled' ) || ( $pop3status ne 'enabled' ) || ( $printpdfprinter eq 'none' ) || ( $printpdfprinter eq '' )){
         $OUT .= "# Something is not right. Check the following values\n";
         $OUT .= "# PrintPDF is $printpdfstatus\n";
         $OUT .= "# POP3 is $pop3status\n";
