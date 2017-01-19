@@ -1,0 +1,60 @@
+I would be a lot easier if a user was created manually first.
+
+However, we can automate it. Just makes it a bit more complex.
+
+Some notes on this.
+
+
+Automatic user-create
+=====================
+
+I thought we could try and use some of the code from lat-users
+
+What user info do we want ?
+
+if ($user not exists) {
+$uid = &FindUid;
+
+}
+
+
+my %user = ("FirstName", $fields[1],
+             "LastName", $fields[2],
+             "PasswordSet", "no",
+             "Uid",$uid,
+             "Dept", $fields[4],
+             "Company", $fields[5],
+             "Shell", "/usr/bin/rssh",
+             "VPNClientAccess","no",
+             "Street", $fields[6],
+             "City", $fields[7],
+             "Phone", $fields[8],
+             "EmailForward", $fields[9],
+             "ForwardAddress", $fields[10]);
+
+
+Create account $username uid:$uid
+Set password
+Set groups - which ones ?
+Set pseudonym ?
+
+
+What do we do with a password? Mail it to admin? Show it on screen after install?
+
+User templates
+==============
+
+If we only want templates for this specific user then I guess we need something like
+
+if ($user='printpdf') {
+$OUT .= "some code"
+}
+
+So the relevant scripts are only created for the specific user.
+
+Script permissions
+==================
+
+Normally we would set these using template.metadata
+
+I'm not sure what happens if we only have templates in one users directory?

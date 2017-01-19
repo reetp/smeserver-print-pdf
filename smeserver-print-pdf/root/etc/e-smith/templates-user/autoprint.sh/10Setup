@@ -1,0 +1,53 @@
+{
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
+
+    my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
+
+    my $printpdfstatus = $configDB->get_prop( 'printpdf', 'status' )
+      || 'disabled';
+
+    my $pop3status = $configDB->get_prop( 'pop3', 'status' )
+      || 'disabled';
+
+    # should be or die here if no printer defined or found
+    my $printpdfPrinter = $configDB->get_prop( 'printpdf', '' )
+      || '';
+
+    if ( $printpdfstatus ne 'enabled' ) && ( $pop3status ne 'enabled' ) && ( $printpdfPrinter ne '' ){
+        $OUT .= "# Something is not right. Check the following values\n";
+        $OUT .= "# PrintPDF is $printpdfstatus\n";
+        $OUT .= "# POP3 is $pop3status\n";
+        $OUT .= "# Printer name $printpdfprinter\n";
+      }
+
+      else {
+        my $printpdfMedia = $configDB->get_prop( 'printpdf', 'Media' )
+          || 'A4';
+
+        # Get other options here
+
+        $OUT .= "#!/bin/bash\n";
+
+        $OUT .= "SUPPORTED_FILETYPES=\".pdf\"\n";
+
+        # this might need to be a bit more trick if you want to specify 1 -> n multiple options
+        $OUT .=
+          "LP_OPTIONS=\"-d $printpdfPrinter -o media=$printpdfMedia -o fit-to-page -o position=top -o scaling=100\"\n";
+
+        $OUT .= "FILENAME=$(date +%H%M%S).txt\n";
+
+        $OUT .= "/usr/bin/fetchmail -s --bsmtp ~/mailtemp/\$FILENAME\n";
+
+        $OUT .= "if [ \"$?\" = \"0\" ]; then\n";
+        $OUT .= "/usr/bin/uudeview +e \$SUPPORTED_FILETYPES -p ~/printable -i ~/mailtemp/\$FILENAME\n";
+        $OUT .= "rm ~/mailtemp/$FILENAME\n";
+        $OUT .= "  for f in ~/printable/*\n";
+        $OUT .= "  do\n";
+        $OUT .= "    lp \$LP_OPTIONS "\$f"\n";
+        $OUT .= "    rm \"\$f\"\n";
+        $OUT .= "done\n";
+        $OUT .= "fi\n";
+    }
+}
