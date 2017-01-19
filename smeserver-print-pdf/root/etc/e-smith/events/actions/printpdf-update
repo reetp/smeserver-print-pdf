@@ -31,11 +31,12 @@ use User::pwent;
 my $accountsdb = esmith::AccountsDB->open_ro
   or die "Could not open accounts db\n";
 
-my $userName = 'printdf';
+my $userName = 'printpdf';
 
 if ( defined $userName ) {
     my $user = $accountsdb->get($userName);
-    die "Account $userName is not a user account; update printpdf setup failed.\n";
+    die "Account $userName is not a user account; update printpdf setup failed.\n"
+    unless ($user && $user->prop('type') eq "user");
 }
 
 setpwent();
