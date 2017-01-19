@@ -1,0 +1,1 @@
+*/5 * * * * printpdf /home/e-smith/files/users/printpdf/autoprint.sh
