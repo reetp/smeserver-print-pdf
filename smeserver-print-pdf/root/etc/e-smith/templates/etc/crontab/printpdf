@@ -1,1 +1,13 @@
-*/5 * * * * printpdf /home/e-smith/files/users/printpdf/autoprint.sh
+{
+
+    my $printpdfstatus = $printpdf{status} || 'disabled';
+
+    if ( $printpdfstatus eq 'enabled' ) {
+
+        $OUT .= "*/5 * * * * printpdf /home/e-smith/files/users/printpdf/autoprint.sh\n";
+    }
+    else {
+
+        $OUT .= "# printpdf disabled\n";
+    }
+}
