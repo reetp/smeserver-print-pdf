@@ -41,7 +41,7 @@ if ( defined $userName ) {
 
 setpwent();
 
-my $home = getpwnam($user)->dir;
+my $home = getpwnam($userName)->dir;
 for my $dotfile (qw(.fetchmailrc)) {
     esmith::templates::processTemplate(
                    { MORE_DATA     => { USERNAME => $userName, },
