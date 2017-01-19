@@ -54,11 +54,11 @@ if ( defined $userName ) {
 
 # {
 #    my $userName = $user->key;
-my $userName = 'printpdf';
+
 
 setpwent();
 
-my $home = getpwnam($userName)->dir;
+my $home = getpwnam($user)->dir;
 for my $dotfile (qw(.fetchmailrc)) {
     esmith::templates::processTemplate(
                    { MORE_DATA     => { USERNAME => $userName, },
