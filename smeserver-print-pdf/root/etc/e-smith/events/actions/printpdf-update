@@ -31,30 +31,12 @@ use User::pwent;
 my $accountsdb = esmith::AccountsDB->open_ro
   or die "Could not open accounts db\n";
 
-# my $event = shift;
-# my $userName = shift;
-my $userName = 'pdfprint';
-
-# my @users;
+my $userName = 'printdf';
 
 if ( defined $userName ) {
     my $user = $accountsdb->get($userName);
-    die "Account $userName is not a user account; update printpdf setup failed.\n"
-
-      #	unless $userName eq 'admin' || ($user && $user->prop('type') eq "user");
-      #    @users = ($user);
+    die "Account $userName is not a user account; update printpdf setup failed.\n";
 }
-
-# else
-# {
-#    @users = ( $accountsdb->users, $accountsdb->get('admin') );
-# }
-
-# foreach my $user (@users)
-
-# {
-#    my $userName = $user->key;
-
 
 setpwent();
 
@@ -70,6 +52,7 @@ for my $dotfile (qw(.fetchmailrc)) {
                      PERMS                 => 0644,
                    }
     );
+}
 
 for my $dotfile (qw(autoprint.sh)) {
     esmith::templates::processTemplate(
@@ -81,14 +64,7 @@ for my $dotfile (qw(autoprint.sh)) {
                      GID                   => $userName,
                      PERMS                 => 0744,
                    }
-    );    
-    
-
-    #    };
-    #    unless (-f "$home/.qmail-default")
-    #    {
-    #	symlink ".qmail", "$home/.qmail-default";
-    #   }
+    );
 }
 
 exit(0);
