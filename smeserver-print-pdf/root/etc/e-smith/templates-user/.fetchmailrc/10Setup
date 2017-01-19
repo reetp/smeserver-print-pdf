@@ -10,7 +10,7 @@
     my $pop3status       = $configDB->get_prop( 'pop3',     'status' )   || 'disabled';
     my $mailserver = $configDB->get('SMTPSmartHost')->value || 'localhost';
 
-    if ( ( $printpdfstatus ne 'enabled' ) && ( $pop3status ne 'enabled' ) ) {
+    if ( ( $printpdfstatus ne 'enabled' ) || ( $pop3status ne 'enabled' ) ) {
         $OUT .= "# PrintPDF is $printpdfstatus\n";
         $OUT .= "# POP3 is $pop3status\n";
         $OUT .= "# Both need to be enabled\n";
