@@ -4,22 +4,21 @@
     use esmith::ConfigDB;
 
     my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
+    my $printpdfstatus  = $configDB->get_prop( 'printpdf', 'status' )      || 'disabled';
+    my $pop3status      = $configDB->get_prop( 'pop3',     'status' )      || 'disabled';
+    my $printpdfprinter = $configDB->get_prop( 'printpdf', 'PrinterName' ) || 'none';
 
-    my $printpdfstatus = $configDB->get_prop( 'printpdf', 'status' ) || 'disabled';
-
-    my $pop3status = $configDB->get_prop( 'pop3', 'status' ) || 'disabled';
-
-    # should be or die here if no printer defined or found
-    my $printpdfprinter = $configDB->get_prop( 'printpdf', 'PrinterName' ) || '';
-
-    if (( $printpdfstatus ne 'enabled' ) || ( $pop3status ne 'enabled' ) || ( $printpdfprinter eq 'none' ) || ( $printpdfprinter eq '' )){
+    if (    ( $printpdfstatus ne 'enabled' )
+         || ( $pop3status ne 'enabled' )
+         || ( $printpdfprinter eq 'none' )
+         || ( $printpdfprinter eq '' ) ) {
         $OUT .= "# Something is not right. Check the following values\n";
         $OUT .= "# PrintPDF is $printpdfstatus\n";
         $OUT .= "# POP3 is $pop3status\n";
         $OUT .= "# Printer name $printpdfprinter\n";
-      }
+    }
 
-      else {
+    else {
         my $printpdfmedia = $configDB->get_prop( 'printpdf', 'Media' ) || 'A4';
 
         # Get other options here
@@ -29,7 +28,8 @@
         $OUT .= "SUPPORTED_FILETYPES=\".pdf\"\n";
 
         # this might need to be a bit more trick if you want to specify 1 -> n multiple options
-        $OUT .= "LP_OPTIONS=\"-d $printpdfprinter -o media=$printpdfmedia -o fit-to-page -o position=top -o scaling=100\"\n";
+        $OUT .=
+          "LP_OPTIONS=\"-d $printpdfprinter -o media=$printpdfmedia -o fit-to-page -o position=top -o scaling=100\"\n";
 
         $OUT .= "FILENAME=\$(date +%H%M%S).txt\n";
 

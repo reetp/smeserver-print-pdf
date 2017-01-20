@@ -9,11 +9,16 @@
     my $printpdfpassword = $configDB->get_prop( 'printpdf', 'Password' ) || 'NoPasswordSet';
     my $pop3status       = $configDB->get_prop( 'pop3',     'status' )   || 'disabled';
     my $mailserver = $configDB->get('SMTPSmartHost')->value || 'localhost';
+    my $printpdfprinter = $configDB->get_prop( 'printpdf', 'PrinterName' ) || 'none';
 
-    if ( ( $printpdfstatus ne 'enabled' ) || ( $pop3status ne 'enabled' ) ) {
+    if (    ( $printpdfstatus ne 'enabled' )
+         || ( $pop3status ne 'enabled' )
+         || ( $printpdfprinter eq 'none' )
+         || ( $printpdfprinter eq '' ) ) {
+        $OUT .= "# Something is not right. Check the following values\n";
         $OUT .= "# PrintPDF is $printpdfstatus\n";
         $OUT .= "# POP3 is $pop3status\n";
-        $OUT .= "# Both need to be enabled\n";
+        $OUT .= "# Printer name $printpdfprinter\n";
     }
 
     else {
